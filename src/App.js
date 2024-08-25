@@ -1,10 +1,15 @@
 import "./App.css";
 import "./style.css";
 import React, { useState, useEffect, useRef } from "react";
+import ToggleSwitch from "./ToggleSwitch";
 
 function App() {
   const [svgString, setSvgString] = useState(` `);
   const [newColor, setNewColor] = useState("#de1717");
+
+  const [isOn, setIsOn] = useState(false);
+
+  const handleToggle = () => setIsOn(!isOn);
 
   const handleCopy = async () => {
     try {
@@ -16,9 +21,6 @@ function App() {
   };
 
   function changeHue(color1, color2) {
-    if (color1 === "#NaNNaNNaN") {
-      color1 = "#aaffaa";
-    }
     // Функция для преобразования HEX в HSL
     function hexToHSL(hex) {
       let r = parseInt(hex.slice(1, 3), 16) / 255;
@@ -64,7 +66,6 @@ function App() {
           .toString(16)
           .padStart(2, "0");
       };
-      console.log(`#${f(0)}${f(8)}${f(4)}`);
       return `#${f(0)}${f(8)}${f(4)}`;
     }
 
@@ -75,39 +76,46 @@ function App() {
     // Создаем новый цвет с тоном второго цвета и насыщенностью/яркостью первого
     return hslToHex(h2, s1, l1);
   }
+  const nameToHex = (colorName) => {
+    const ctx = document.createElement("canvas").getContext("2d");
+    ctx.fillStyle = colorName;
+    return ctx.fillStyle;
+  };
 
   const handleColorChange = () => {
     const parser = new DOMParser();
     const doc = parser.parseFromString(svgString, "image/svg+xml");
 
     const elements = doc.querySelectorAll("*");
+
     elements.forEach((element) => {
-      if (
-        element.getAttribute("fill") &&
-        !element.getAttribute("fill").startsWith("url(#") &&
-        element.getAttribute("fill") !== "none"
-      ) {
-        const colorResult = changeHue(element.getAttribute("fill"), newColor);
+      let fillColor = element.getAttribute("fill");
+      if (fillColor && !fillColor.startsWith("url(#") && fillColor !== "none") {
+        if (!fillColor.startsWith("#") && !fillColor.startsWith("rgb")) {
+          fillColor = nameToHex(fillColor);
+        }
+        const colorResult = changeHue(fillColor, newColor);
         element.setAttribute("fill", colorResult);
       }
-      if (
-        element.getAttribute("stroke") &&
-        element.getAttribute("stroke") !== "none"
-      ) {
-        const colorResult = changeHue(element.getAttribute("stroke"), newColor);
+
+      let strokeColor = element.getAttribute("stroke");
+      if (strokeColor && strokeColor !== "none") {
+        if (!strokeColor.startsWith("#") && !strokeColor.startsWith("rgb")) {
+          strokeColor = nameToHex(strokeColor);
+        }
+        const colorResult = changeHue(strokeColor, newColor);
         element.setAttribute("stroke", colorResult);
       }
     });
+
     // Изменение градиентов
     const gradients = doc.querySelectorAll("linearGradient, radialGradient");
     gradients.forEach((gradient) => {
       const stops = gradient.querySelectorAll("stop");
       stops.forEach((stop) => {
-        if (stop.getAttribute("stop-color")) {
-          const colorResult = changeHue(
-            stop.getAttribute("stop-color"),
-            newColor
-          );
+        let gradientColor = stop.getAttribute("stop-color");
+        if (gradientColor) {
+          const colorResult = changeHue(gradientColor, newColor);
           stop.setAttribute("stop-color", colorResult);
         }
       });
@@ -142,6 +150,11 @@ function App() {
   return (
     <div className="App">
       <h2>SVG recolor</h2>
+      {/* <ToggleSwitch
+        isOn={isOn}
+        handleToggle={handleToggle}
+        onColor={newColor}
+      /> */}
       <div className="control-panel">
         <form>
           <label className="input-file-label">
@@ -161,7 +174,11 @@ function App() {
               onChange={(e) => setNewColor(e.target.value)}
             />
           </div>
-          <button className="change-color-button" onClick={handleColorChange}>
+          <button
+            className="change-color-button"
+            onClick={handleColorChange}
+            style={{ border: `1px solid ${newColor}` }}
+          >
             Изменить цвет
           </button>
         </div>
