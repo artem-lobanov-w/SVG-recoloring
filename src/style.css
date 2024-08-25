@@ -1,0 +1,241 @@
+@font-face {
+	font-family: 'Unageo-Black';
+	src: url(/fonts/UnageoBlack-Regular.ttf); 
+}
+
+@font-face {
+	font-family: 'Unageo-Extrabold';
+	src: url(/fonts/UnageoExtrabold-Regular.ttf); 
+}
+
+@font-face {
+	font-family: 'Unageo-Light';
+	src: url(/fonts/UnageoLight-Regular.ttf); 
+}
+
+@font-face {
+	font-family: 'Unageo';
+	src: url(/fonts/Unageo.ttf); 
+}
+
+@font-face {
+	font-family: 'Unageo-Italic';
+	src: url(/fonts/Unageo-Italic.ttf); 
+}
+
+:root {
+  font-family: Unageo, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 100;
+  text-align: start;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  gap: 70px;
+  font-size: 16px;
+}
+
+h1 {
+  font-family: 'Unageo';
+  font-weight: 900;
+  font-size: 8.12vw;
+  line-height: 144px;
+  margin: 0px;
+  text-transform: uppercase;
+}
+
+.h1 {
+  max-width: 100%;
+}
+
+h2 {
+  font-family: 'Unageo';
+  font-size: 40px;
+  margin-top: 0;
+  margin-bottom: 0px;
+}
+
+h3 {
+  font-family: 'Unageo';
+  box-sizing: border-box;
+  margin: 0;
+  margin-bottom: 10px;
+  font-size: 53px;
+  font-weight: 800;
+  line-height: normal;
+}
+
+p {
+  font-family: 'Unageo';
+  box-sizing: border-box;
+  margin: 0;
+  font-size: 20px;
+  font-weight: 300;
+  line-height: 24px;
+  color: #fff;
+  padding: 0px;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+button {
+  min-width: 250px;
+  font-family: Unageo,sans-serif;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 12px;
+  border: none;
+  outline: none;
+  padding: 0px 20px;
+  height: 50px;
+  z-index: 5;
+}
+
+.input-color {
+  box-sizing: border-box;
+  overflow: hidden;
+  height: 50px;
+  width: 50px;
+  padding: 0px 4px;
+  background-color: #00000000;
+  border: 1px solid #484848;
+  border-radius: 12px;
+  display: flex;
+  gap: 10px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.change-color-button {
+  background-color: #00000000;
+  border: 1px solid #484848;
+  border-radius: 12px;
+  color: #ffffff;
+}
+
+.change-color {
+  display: flex;
+  gap: 10px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.input-file-label {
+	position: relative;
+	display: inline-block;
+}
+
+.input-file {
+  display: none;
+}
+
+.input-file-btn {
+	position: relative;
+	display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 250px;
+	cursor: pointer;
+	outline: none;
+  font-family: Unageo,sans-serif;
+	text-decoration: none;
+	vertical-align: middle;
+  align-items: center;
+  border: 1px solid #484848;
+	color: rgb(255, 255, 255);
+	text-align: center;
+	border-radius: 12px;
+	background-color: #2e2e2e;
+	line-height: 22px;
+	height: 50px;
+	padding: 0px 20px;
+	box-sizing: border-box;
+	/* border: none; */
+  /* outline: 1px solid #484848; */
+	margin: 0;
+	transition: background-color 0.2s;
+}
+
+.control-panel {
+  max-width: 1100px;
+  display: flex;
+  gap: 10px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 30px 30px;
+  border-bottom: 1px solid #212121;
+  border-top: 1px solid #212121;
+}
+
+body {
+  /* font-family: 'Unageo';
+  font-weight: 100; */
+  margin: 0;
+  display: flex;
+  /* place-items: center; */
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: #111111;
+  color: #fff;
+}
+
+.plusButton {
+  background-color: #212121;
+  height: 330px;
+  border-radius: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+input {
+  min-height: 100px;
+  min-width: 100px;
+  padding: 0px 4px;
+  background-color: #00000000;
+  /* border: 1px solid #ffffff; */
+}
+
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+}
