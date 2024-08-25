@@ -2,7 +2,6 @@ import "./App.css";
 import "./style.css";
 import React, { useState, useEffect, useRef } from "react";
 
-
 function App() {
   const [svgString, setSvgString] = useState(` `);
   const [newColor, setNewColor] = useState("#de1717");
@@ -17,10 +16,8 @@ function App() {
   };
 
   function changeHue(color1, color2) {
-    if (color1 === '#NaNNaNNaN') {
-      console.log(color1);
-      color1 = '#aaffaa';
-      
+    if (color1 === "#NaNNaNNaN") {
+      color1 = "#aaffaa";
     }
     // Функция для преобразования HEX в HSL
     function hexToHSL(hex) {
@@ -87,12 +84,16 @@ function App() {
     elements.forEach((element) => {
       if (
         element.getAttribute("fill") &&
-        !element.getAttribute("fill").startsWith("url(#")
+        !element.getAttribute("fill").startsWith("url(#") &&
+        element.getAttribute("fill") !== "none"
       ) {
         const colorResult = changeHue(element.getAttribute("fill"), newColor);
         element.setAttribute("fill", colorResult);
       }
-      if (element.getAttribute("stroke")) {
+      if (
+        element.getAttribute("stroke") &&
+        element.getAttribute("stroke") !== "none"
+      ) {
         const colorResult = changeHue(element.getAttribute("stroke"), newColor);
         element.setAttribute("stroke", colorResult);
       }
@@ -112,6 +113,11 @@ function App() {
       });
     });
 
+    const masks = doc.querySelectorAll("mask");
+    masks.forEach((mask) => {
+      mask.setAttribute("style", "mask-type:alpha");
+    });
+
     const modifiedSVG = new XMLSerializer().serializeToString(doc);
     setSvgString(modifiedSVG);
   };
@@ -119,14 +125,12 @@ function App() {
   const handleFileChange = (event) => {
     const file = event.target.files[0];
 
-    
     if (file && file.type === "image/svg+xml") {
-      
       const reader = new FileReader();
 
       reader.onload = (e) => {
         const svgContent = e.target.result;
-        setSvgString(svgContent); 
+        setSvgString(svgContent);
       };
 
       reader.readAsText(file);
