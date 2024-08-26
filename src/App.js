@@ -99,7 +99,11 @@ function App() {
       }
 
       let strokeColor = element.getAttribute("stroke");
-      if (strokeColor && strokeColor !== "none") {
+      if (
+        strokeColor &&
+        !strokeColor.startsWith("url(#") &&
+        strokeColor !== "none"
+      ) {
         if (!strokeColor.startsWith("#") && !strokeColor.startsWith("rgb")) {
           strokeColor = nameToHex(strokeColor);
         }
@@ -114,10 +118,20 @@ function App() {
       const stops = gradient.querySelectorAll("stop");
       stops.forEach((stop) => {
         let gradientColor = stop.getAttribute("stop-color");
-        if (gradientColor) {
+        // if (stop.getAttribute("stop-color") === null) {
+        //   stop.setAttribute("stop-color", "#ffffff");
+        // }
+        if (gradientColor && gradientColor !== "none") {
+          if (
+            !gradientColor.startsWith("#") &&
+            !gradientColor.startsWith("rgb")
+          ) {
+            gradientColor = nameToHex(gradientColor);
+          }
           const colorResult = changeHue(gradientColor, newColor);
           stop.setAttribute("stop-color", colorResult);
         }
+        console.log(stop.getAttribute("stop-color"));
       });
     });
 
@@ -150,11 +164,11 @@ function App() {
   return (
     <div className="App">
       <h2>SVG recolor</h2>
-      {/* <ToggleSwitch
+      <ToggleSwitch
         isOn={isOn}
         handleToggle={handleToggle}
         onColor={newColor}
-      /> */}
+      />
       <div className="control-panel">
         <form>
           <label className="input-file-label">
