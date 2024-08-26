@@ -5,11 +5,20 @@ import ToggleSwitch from "./ToggleSwitch";
 
 function App() {
   const [svgString, setSvgString] = useState(` `);
+  const [svgStringFile, setSvgStringFile] = useState(null);
+  const [fileAdd, setFileAdd] = useState(false);
   const [newColor, setNewColor] = useState("#de1717");
 
-  const [isOn, setIsOn] = useState(false);
+  const [isOn, setIsOn] = useState(true);
 
-  const handleToggle = () => setIsOn(!isOn);
+  const handleToggle = () => {
+    setIsOn(!isOn);
+  };
+  useEffect(() => {
+    if (svgStringFile) {
+      handleColorChange();
+    }
+  }, [isOn]);
 
   const handleCopy = async () => {
     try {
@@ -72,9 +81,15 @@ function App() {
     // Получаем HSL значения обоих цветов
     let [h1, s1, l1] = hexToHSL(color1);
     let [h2, s2, l2] = hexToHSL(color2);
+    let colR;
+    if (isOn) {
+      colR = hslToHex(h2, s1, l1);
+    } else {
+      colR = hslToHex(0, 0, l1);
+    }
 
     // Создаем новый цвет с тоном второго цвета и насыщенностью/яркостью первого
-    return hslToHex(h2, s1, l1);
+    return colR;
   }
   const nameToHex = (colorName) => {
     const ctx = document.createElement("canvas").getContext("2d");
@@ -84,7 +99,7 @@ function App() {
 
   const handleColorChange = () => {
     const parser = new DOMParser();
-    const doc = parser.parseFromString(svgString, "image/svg+xml");
+    const doc = parser.parseFromString(svgStringFile, "image/svg+xml");
 
     const elements = doc.querySelectorAll("*");
 
@@ -118,9 +133,6 @@ function App() {
       const stops = gradient.querySelectorAll("stop");
       stops.forEach((stop) => {
         let gradientColor = stop.getAttribute("stop-color");
-        // if (stop.getAttribute("stop-color") === null) {
-        //   stop.setAttribute("stop-color", "#ffffff");
-        // }
         if (gradientColor && gradientColor !== "none") {
           if (
             !gradientColor.startsWith("#") &&
@@ -131,7 +143,6 @@ function App() {
           const colorResult = changeHue(gradientColor, newColor);
           stop.setAttribute("stop-color", colorResult);
         }
-        console.log(stop.getAttribute("stop-color"));
       });
     });
 
@@ -145,13 +156,16 @@ function App() {
   };
 
   const handleFileChange = (event) => {
+    setIsOn(true);
     const file = event.target.files[0];
 
     if (file && file.type === "image/svg+xml") {
+      setFileAdd(true);
       const reader = new FileReader();
 
       reader.onload = (e) => {
         const svgContent = e.target.result;
+        setSvgStringFile(svgContent);
         setSvgString(svgContent);
       };
 
@@ -164,11 +178,19 @@ function App() {
   return (
     <div className="App">
       <h2>SVG recolor</h2>
-      <ToggleSwitch
-        isOn={isOn}
-        handleToggle={handleToggle}
-        onColor={newColor}
-      />
+      <div className="switch-container">
+        <ToggleSwitch
+          isOn={isOn}
+          handleToggle={handleToggle}
+          onColor={newColor}
+        />
+        <p className="switch-description">
+          Режим {" "}
+          <span style={isOn ? { color: newColor } : { color: "#ffffff" }}>
+            {isOn ? "полноцветный" : "монохромный"}
+          </span>
+        </p>
+      </div>
       <div className="control-panel">
         <form>
           <label className="input-file-label">
@@ -190,7 +212,7 @@ function App() {
           </div>
           <button
             className="change-color-button"
-            onClick={handleColorChange}
+            onClick={fileAdd ? handleColorChange : null}
             style={{ border: `1px solid ${newColor}` }}
           >
             Изменить цвет
@@ -198,7 +220,8 @@ function App() {
         </div>
         <button onClick={handleCopy}>Копировать SVG</button>
       </div>
-      <div dangerouslySetInnerHTML={{ __html: svgString }} />
+      <div style={{paddingBottom: '100px'}} dangerouslySetInnerHTML={{ __html: svgString }} />
+      <p className="author-info">Created by <a className="author-link" href="https://github.com/artem-lobanov-w">Artem Lobanov</a></p>
     </div>
   );
 }
