@@ -2,6 +2,7 @@ import "./App.css";
 import "./style.css";
 import React, { useState, useEffect, useRef } from "react";
 import ToggleSwitch from "./ToggleSwitch";
+import deleteSvg from "./img/Delete.svg";
 
 function App() {
   const [svgString, setSvgString] = useState(` `);
@@ -174,6 +175,13 @@ function App() {
     setSvgString(modifiedSVG);
   };
 
+  const handleDeleteFile = () => {
+    setIsOn(false);
+    setFileAdd(false);
+    setSvgStringFile(null);
+    setSvgString(null);
+  };
+
   const handleFileChange = (event) => {
     setIsOn(false);
     const file = event.target.files[0];
@@ -215,18 +223,24 @@ function App() {
 
   return (
     <div className="App">
-      <h2>SVG recolor</h2>
+      <h1>SVG recolor</h1>
       <div className="control-panel">
-        <form>
-          <label className="input-file-label">
-            <input
-              className="input-file"
-              type="file"
-              onChange={handleFileChange}
-            />
-            <span className="input-file-btn">Выберите SVG-файл</span>
-          </label>
-        </form>
+        <div className="change-color-container">
+          <form>
+            <label className="input-file-label">
+              <input
+                className="input-file"
+                type="file"
+                onChange={handleFileChange}
+              />
+              <span className="input-file-btn">Выберите SVG-файл</span>
+            </label>
+          </form>
+          <div className="delete-btn" onClick={handleDeleteFile} style={svgStringFile ? { opacity: "100%", pointerEvents: "auto" } : { opacity: "30%", pointerEvents: "none" }}>
+            <img className="delete-icon" src={deleteSvg} alt="Удалить" />
+            <p>Удалить файл</p>
+          </div>
+        </div>
         <div className="change-color-container" style={svgStringFile ? { opacity: "100%", pointerEvents: "auto" } : { opacity: "30%", pointerEvents: "none" }}>
           <div className="change-color">
             <div className="input-color">
