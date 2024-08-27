@@ -3,13 +3,16 @@ import "./style.css";
 import React, { useState, useEffect, useRef } from "react";
 import ToggleSwitch from "./ToggleSwitch";
 import deleteSvg from "./img/Delete.svg";
+import recoverSvg from "./img/Recover.svg";
+import pickerSvg from "./img/Picker.svg";
 
 function App() {
   const [svgString, setSvgString] = useState(` `);
   const [svgStringFile, setSvgStringFile] = useState(null);
   const [fileAdd, setFileAdd] = useState(false);
-  const [newColor, setNewColor] = useState("#de1717");
+  const [newColor, setNewColor] = useState("#fffaaa");
   const [isOn, setIsOn] = useState(false);
+  const [originalSvgString, setOriginalSvgString] = useState('');
 
   const svgRef = useRef();
 
@@ -22,13 +25,12 @@ function App() {
     }
   }, [isOn]);
   useEffect(() => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(svgStringFile, "image/svg+xml");
+    const svgs = doc.querySelectorAll("svg");
     if (svgStringFile) {
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(svgStringFile, "image/svg+xml");
-      const svgs = doc.querySelectorAll("svg");
       svgs.forEach((svg) => {
-        console.log(svg);
-        svg.setAttribute("style", "max-width: 1160px; height: 450px; ");
+        svg.setAttribute("style", "max-width: 1160px; height: 520px; ");
       });
       const modifiedSVG = new XMLSerializer().serializeToString(doc);
       setSvgString(modifiedSVG);
@@ -161,10 +163,8 @@ function App() {
       });
     });
 
-    const svgs = doc.querySelectorAll("svg");
-    svgs.forEach((svg) => {
-      svg.setAttribute("style", "max-width: 1160px; height: 450px; ");
-    });
+    const svg = doc.querySelectorAll("svg")[0];
+    svg.setAttribute("style", "max-width: 1160px; height: 520px; ");
 
     const masks = doc.querySelectorAll("mask");
     masks.forEach((mask) => {
@@ -176,7 +176,6 @@ function App() {
   };
 
   const handleDeleteFile = () => {
-    setIsOn(false);
     setFileAdd(false);
     setSvgStringFile(null);
     setSvgString(null);
@@ -185,17 +184,25 @@ function App() {
   const handleFileChange = (event) => {
     setIsOn(false);
     const file = event.target.files[0];
-
+  
     if (file && file.type === "image/svg+xml") {
       setFileAdd(true);
       const reader = new FileReader();
-
+  
       reader.onload = (e) => {
         const svgContent = e.target.result;
         setSvgStringFile(svgContent);
         setSvgString(svgContent);
-      };
 
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(svgContent, "image/svg+xml");
+        const svgOriginal = doc.querySelectorAll("svg")[0];
+        svgOriginal.setAttribute("style", "max-width: 1160px; height: 520px; ");
+        const modifiedSVG = new XMLSerializer().serializeToString(doc);
+        // Исходное состояние файла
+        setOriginalSvgString(modifiedSVG); 
+      };
+  
       reader.readAsText(file);
     } else {
       console.error("Выбран неверный тип файла.");
@@ -221,6 +228,10 @@ function App() {
     URL.revokeObjectURL(url);
   };
 
+  const ResetFile = () => {
+    setSvgString(originalSvgString); // Восстанавливаем исходное состояние
+  };
+
   return (
     <div className="App">
       <h1>SVG recolor</h1>
@@ -233,30 +244,32 @@ function App() {
                 type="file"
                 onChange={handleFileChange}
               />
-              <span className="input-file-btn">Выберите SVG-файл</span>
+              <span className="input-file-btn" style={svgStringFile ? { boxShadow: "0 0 70px #ffffff00", border: "1px solid #696969" } : { boxShadow: "0 0 70px #ffffff70", border: "1px solid #ffffff" }}>Выбрать SVG-файл</span>
             </label>
           </form>
-          <div className="delete-btn" onClick={handleDeleteFile} style={svgStringFile ? { opacity: "100%", pointerEvents: "auto" } : { opacity: "30%", pointerEvents: "none" }}>
-            <img className="delete-icon" src={deleteSvg} alt="Удалить" />
-            <p>Удалить файл</p>
+          <div className="delete-btn" onClick={ResetFile} style={svgStringFile ? { opacity: "100%", pointerEvents: "auto" } : { opacity: "30%", pointerEvents: "none" }}>
+            <img className="delete-icon" src={recoverSvg} alt="Восстановить" />
+            <p>Восстановить исходный</p>
           </div>
         </div>
         <div className="change-color-container" style={svgStringFile ? { opacity: "100%", pointerEvents: "auto" } : { opacity: "30%", pointerEvents: "none" }}>
           <div className="change-color">
-            <div className="input-color">
+            <div className="input-color" style={svgStringFile ? { boxShadow: `0 0 40px ${newColor}80` } : { boxShadow: `0 0 40px ${newColor}00` }}>
               <input
                 type="color"
                 value={newColor}
                 onChange={(e) => setNewColor(e.target.value)}
               />
+              <img className="recover-icon" src={pickerSvg} alt="Восстановить" />
             </div>
             <button
               className="change-color-button"
               onClick={fileAdd ? handleColorChange : null}
               style={{ border: `1px solid ${newColor}` }}
             >
-              Изменить цвет
+              Применить
             </button>
+            {/* <div className="input-color" onClick={ResetFile}></div> */}
           </div>
           <div className="switch-container">
             <ToggleSwitch
@@ -279,7 +292,7 @@ function App() {
       </div>
       <div
         ref={svgRef}
-        style={{ maxWidth: "100%", width: "100%", paddingBottom: "100px" }}
+        style={{ maxWidth: "100%", width: "100%" }}
         dangerouslySetInnerHTML={{ __html: svgString }}
       />
       <p className="author-info">

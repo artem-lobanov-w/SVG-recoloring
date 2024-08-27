@@ -112,13 +112,14 @@ button {
 }
 
 .input-color {
+  position: relative;
   box-sizing: border-box;
   overflow: hidden;
   height: 50px;
   width: 50px;
   padding: 0px 4px;
   background-color: #00000000;
-  border: 1px solid #484848;
+  /* border: 1px solid #484848; */
   border-radius: 12px;
   display: flex;
   gap: 10px;
@@ -127,11 +128,17 @@ button {
   justify-content: center;
 }
 
+.recover-icon {
+  position: absolute;
+  pointer-events: none;
+}
+
 .change-color-button {
   background-color: #00000000;
   border: 1px solid #484848;
   border-radius: 12px;
   color: #ffffff;
+  /* min-width: 100px; */
 }
 
 .change-color {
@@ -146,8 +153,8 @@ button {
 .input-file-label {
 	position: relative;
 	display: inline-block;
-}
 
+}
 .input-file {
   display: none;
 }
@@ -164,7 +171,7 @@ button {
 	text-decoration: none;
 	vertical-align: middle;
   align-items: center;
-  border: 1px solid #484848;
+  border: 1px solid #696969;
 	color: rgb(255, 255, 255);
 	text-align: center;
 	border-radius: 12px;
@@ -173,10 +180,12 @@ button {
 	height: 50px;
 	padding: 0px 20px;
 	box-sizing: border-box;
+  /* box-shadow: 0 0 70px #ffffff70; */
 	/* border: none; */
   /* outline: 1px solid #484848; */
 	margin: 0;
 	transition: background-color 0.2s;
+  transition: all 0.2s;
 }
 
 .control-panel {
@@ -236,11 +245,11 @@ body {
   gap: 10px;
   align-items: center;
   justify-content: start;
-  min-width: 220px;
+  min-width: 240px;
 }
 
 .switch-description {
-  font-size: 14px;
+  font-size: 16px;
   color: #a0a0a0;
 }
 
