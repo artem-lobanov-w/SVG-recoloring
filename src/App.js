@@ -8,8 +8,9 @@ function App() {
   const [svgStringFile, setSvgStringFile] = useState(null);
   const [fileAdd, setFileAdd] = useState(false);
   const [newColor, setNewColor] = useState("#de1717");
+  const [isOn, setIsOn] = useState(false);
 
-  const [isOn, setIsOn] = useState(true);
+  const svgRef = useRef();
 
   const handleToggle = () => {
     setIsOn(!isOn);
@@ -19,13 +20,26 @@ function App() {
       handleColorChange();
     }
   }, [isOn]);
+  useEffect(() => {
+    if (svgStringFile) {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(svgStringFile, "image/svg+xml");
+      const svgs = doc.querySelectorAll("svg");
+      svgs.forEach((svg) => {
+        console.log(svg);
+        svg.setAttribute("style", "max-width: 1160px; height: 450px; ");
+      });
+      const modifiedSVG = new XMLSerializer().serializeToString(doc);
+      setSvgString(modifiedSVG);
+    }
+  }, [svgStringFile]);
 
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(svgString);
-      alert("Текст скопирован в буфер обмена!");
+      alert("Код SVG скопирован в буфер обмена!");
     } catch (err) {
-      console.error("Не удалось скопировать текст: ", err);
+      console.error("Не удалось скопировать код SVG: ", err);
     }
   };
 
@@ -82,10 +96,10 @@ function App() {
     let [h1, s1, l1] = hexToHSL(color1);
     let [h2, s2, l2] = hexToHSL(color2);
     let colR;
-    if (isOn) {
+    if (!isOn) {
       colR = hslToHex(h2, s1, l1);
     } else {
-      colR = hslToHex(0, 0, l1);
+      colR = hslToHex(h2, s2, l1);
     }
 
     // Создаем новый цвет с тоном второго цвета и насыщенностью/яркостью первого
@@ -146,6 +160,11 @@ function App() {
       });
     });
 
+    const svgs = doc.querySelectorAll("svg");
+    svgs.forEach((svg) => {
+      svg.setAttribute("style", "max-width: 1160px; height: 450px; ");
+    });
+
     const masks = doc.querySelectorAll("mask");
     masks.forEach((mask) => {
       mask.setAttribute("style", "mask-type:alpha");
@@ -156,7 +175,7 @@ function App() {
   };
 
   const handleFileChange = (event) => {
-    setIsOn(true);
+    setIsOn(false);
     const file = event.target.files[0];
 
     if (file && file.type === "image/svg+xml") {
@@ -175,22 +194,28 @@ function App() {
     }
   };
 
+  const handleDownloadSVG = () => {
+    const svgElement = svgRef.current.querySelectorAll("svg")[0];
+    const serializer = new XMLSerializer();
+    const source = serializer.serializeToString(svgElement);
+
+    const blob = new Blob([source], { type: "image/svg+xml" });
+
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "recolored-svg-image.svg";
+
+    document.body.appendChild(link);
+    link.click();
+
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="App">
       <h2>SVG recolor</h2>
-      <div className="switch-container">
-        <ToggleSwitch
-          isOn={isOn}
-          handleToggle={handleToggle}
-          onColor={newColor}
-        />
-        <p className="switch-description">
-          Режим {" "}
-          <span style={isOn ? { color: newColor } : { color: "#ffffff" }}>
-            {isOn ? "полноцветный" : "монохромный"}
-          </span>
-        </p>
-      </div>
       <div className="control-panel">
         <form>
           <label className="input-file-label">
@@ -202,26 +227,53 @@ function App() {
             <span className="input-file-btn">Выберите SVG-файл</span>
           </label>
         </form>
-        <div className="change-color">
-          <div className="input-color">
-            <input
-              type="color"
-              value={newColor}
-              onChange={(e) => setNewColor(e.target.value)}
-            />
+        <div className="change-color-container" style={svgStringFile ? { opacity: "100%", pointerEvents: "auto" } : { opacity: "30%", pointerEvents: "none" }}>
+          <div className="change-color">
+            <div className="input-color">
+              <input
+                type="color"
+                value={newColor}
+                onChange={(e) => setNewColor(e.target.value)}
+              />
+            </div>
+            <button
+              className="change-color-button"
+              onClick={fileAdd ? handleColorChange : null}
+              style={{ border: `1px solid ${newColor}` }}
+            >
+              Изменить цвет
+            </button>
           </div>
-          <button
-            className="change-color-button"
-            onClick={fileAdd ? handleColorChange : null}
-            style={{ border: `1px solid ${newColor}` }}
-          >
-            Изменить цвет
-          </button>
+          <div className="switch-container">
+            <ToggleSwitch
+              isOn={isOn}
+              handleToggle={handleToggle}
+              onColor={newColor}
+            />
+            <p className="switch-description">
+              Режим{" "}
+              <span style={isOn ? { color: newColor } : { color: "#ffffff" }}>
+                {isOn ? "хроматический" : "ахроматический"}
+              </span>
+            </p>
+          </div>
         </div>
-        <button onClick={handleCopy}>Копировать SVG</button>
+        <div className="download-container" style={svgStringFile ? { opacity: "100%", pointerEvents: "auto" } : { opacity: "30%", pointerEvents: "none" }}>
+          <button onClick={svgStringFile ? handleDownloadSVG : null}>Скачать SVG</button>
+          <p className="download-code-svg" onClick={svgStringFile ? handleCopy : null}>Скопировать код SVG</p>
+        </div>
       </div>
-      <div style={{paddingBottom: '100px'}} dangerouslySetInnerHTML={{ __html: svgString }} />
-      <p className="author-info">Created by <a className="author-link" href="https://github.com/artem-lobanov-w">Artem Lobanov</a></p>
+      <div
+        ref={svgRef}
+        style={{ maxWidth: "100%", width: "100%", paddingBottom: "100px" }}
+        dangerouslySetInnerHTML={{ __html: svgString }}
+      />
+      <p className="author-info">
+        Created by{" "}
+        <a className="author-link" href="https://github.com/artem-lobanov-w">
+          Artem Lobanov
+        </a>
+      </p>
     </div>
   );
 }
