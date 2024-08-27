@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/SVG-recoloring/static/css/main.67c76c64.css",
-    "main.js": "/SVG-recoloring/static/js/main.f06e80c0.js",
+    "main.css": "/SVG-recoloring/static/css/main.6221b1df.css",
+    "main.js": "/SVG-recoloring/static/js/main.27889ae4.js",
     "static/js/453.7ae672de.chunk.js": "/SVG-recoloring/static/js/453.7ae672de.chunk.js",
     "static/media/Unageo-Italic.ttf": "/SVG-recoloring/static/media/Unageo-Italic.a8002ffb08bd22a1e1d1.ttf",
     "static/media/Unageo.ttf": "/SVG-recoloring/static/media/Unageo.3c21130b22859102c924.ttf",
@@ -9,12 +9,13 @@
     "static/media/UnageoExtrabold-Regular.ttf": "/SVG-recoloring/static/media/UnageoExtrabold-Regular.f688cf9759eda7ef1957.ttf",
     "static/media/UnageoBlack-Regular.ttf": "/SVG-recoloring/static/media/UnageoBlack-Regular.890e850655c844838c32.ttf",
     "index.html": "/SVG-recoloring/index.html",
-    "main.67c76c64.css.map": "/SVG-recoloring/static/css/main.67c76c64.css.map",
-    "main.f06e80c0.js.map": "/SVG-recoloring/static/js/main.f06e80c0.js.map",
+    "static/media/Delete.svg": "/SVG-recoloring/static/media/Delete.dfbb155ba2f94624078e094b55a04fd7.svg",
+    "main.6221b1df.css.map": "/SVG-recoloring/static/css/main.6221b1df.css.map",
+    "main.27889ae4.js.map": "/SVG-recoloring/static/js/main.27889ae4.js.map",
     "453.7ae672de.chunk.js.map": "/SVG-recoloring/static/js/453.7ae672de.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.67c76c64.css",
-    "static/js/main.f06e80c0.js"
+    "static/css/main.6221b1df.css",
+    "static/js/main.27889ae4.js"
   ]
 }
