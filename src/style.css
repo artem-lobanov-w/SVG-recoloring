@@ -1,29 +1,41 @@
 @font-face {
-	font-family: 'Unageo-Black';
-	src: url(/fonts/UnageoBlack-Regular.ttf); 
+  font-family: "Unageo-Black";
+  src: url(/fonts/UnageoBlack-Regular.ttf);
 }
 
 @font-face {
-	font-family: 'Unageo-Extrabold';
-	src: url(/fonts/UnageoExtrabold-Regular.ttf); 
+  font-family: "Unageo-Extrabold";
+  src: url(/fonts/UnageoExtrabold-Regular.ttf);
 }
 
 @font-face {
-	font-family: 'Unageo-Light';
-	src: url(/fonts/UnageoLight-Regular.ttf); 
+  font-family: "Unageo-Light";
+  src: url(/fonts/UnageoLight-Regular.ttf);
 }
 
 @font-face {
-	font-family: 'Unageo';
-	src: url(/fonts/Unageo.ttf); 
+  font-family: "Unageo";
+  src: url(/fonts/Unageo.ttf);
 }
 
 @font-face {
-	font-family: 'Unageo-Italic';
-	src: url(/fonts/Unageo-Italic.ttf); 
+  font-family: "Unageo-Italic";
+  src: url(/fonts/Unageo-Italic.ttf);
 }
 
 :root {
+  --background-color: #111111;
+  --text-color: #fff;
+  --text-color-btn-dwnld: #111111;
+  --text-color-author: #555555;
+  --background-not-addded-file-btn: #2e2e2e;
+  --border-not-addded-file-btn: #fff;
+  --background-addded-file-btn: #2e2e2e;
+  --border-addded-file-btn: #696969;
+  --background-btn-dwnld: #ffffff;
+  --color-lines: #212121;
+  --background-change-color-btn: #2e2e2e;
+  --border-color-add-file-btn: #c3c0c0;
   font-family: Unageo, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 100;
@@ -31,7 +43,7 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background-color: var(--background-color);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -39,13 +51,25 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+body {
+  margin: 0;
+  display: flex;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
 .App {
+  width: 1160px;
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 20px;
   min-height: 100%;
+  border-left: 1px solid var(--color-lines);
+  border-right: 1px solid var(--color-lines);
 }
 
 main {
@@ -56,9 +80,10 @@ main {
 }
 
 h1 {
-  font-family: 'Unageo';
+  font-family: "Unageo";
   font-size: 40px;
   margin: 0px;
+  margin-top: 40px;
 }
 
 .h1 {
@@ -66,7 +91,7 @@ h1 {
 }
 
 h2 {
-  font-family: 'Unageo';
+  font-family: "Unageo";
   font-size: 40px;
   margin-top: 0;
   margin-bottom: 0px;
@@ -74,7 +99,7 @@ h2 {
 }
 
 h3 {
-  font-family: 'Unageo';
+  font-family: "Unageo";
   box-sizing: border-box;
   margin: 0;
   margin-bottom: 10px;
@@ -84,20 +109,19 @@ h3 {
 }
 
 p {
-  font-family: 'Unageo';
+  font-family: "Unageo";
   box-sizing: border-box;
   margin: 0;
   font-size: 20px;
   font-weight: 300;
   line-height: 24px;
-  color: #fff;
+  color: var(--text-color);
   padding: 0px;
 }
 
-
 button {
   min-width: 250px;
-  font-family: Unageo,sans-serif;
+  font-family: Unageo, sans-serif;
   font-size: 16px;
   display: flex;
   align-items: center;
@@ -109,17 +133,39 @@ button {
   padding: 0px 20px;
   height: 50px;
   z-index: 5;
+  color: var(--text-color-btn-dwnld);
+  background-color: var(--background-btn-dwnld);
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.indicator-color {
+  position: absolute;
+  pointer-events: none;
+  left: 8px;
+  width: 36px;
+  height: 34px;
+  z-index: 8;
+  border-radius: 8px;
 }
 
 .input-color {
-  position: relative;
+  z-index: 6;
+  left: 0px;
   box-sizing: border-box;
   overflow: hidden;
   height: 50px;
-  width: 50px;
+  width: 250px;
   padding: 0px 4px;
   background-color: #00000000;
-  /* border: 1px solid #484848; */
+  border: 1px solid #484848;
   border-radius: 12px;
   display: flex;
   gap: 10px;
@@ -128,16 +174,21 @@ button {
   justify-content: center;
 }
 
-.recover-icon {
+.picker-icon {
   position: absolute;
   pointer-events: none;
 }
 
 .change-color-button {
-  background-color: #00000000;
+  position: absolute;
+  pointer-events: none;
+  min-width: 250px;
+  height: 50px;
+  padding-left: 54px;
+  background-color: var(--background-change-color-btn);
   border: 1px solid #484848;
-  border-radius: 12px;
-  color: #ffffff;
+  border-radius: 8px;
+  color: var(--text-color);
   /* min-width: 100px; */
 }
 
@@ -148,44 +199,54 @@ button {
   align-items: center;
   justify-content: center;
   width: 100%;
+  position: relative;
 }
 
 .input-file-label {
-	position: relative;
-	display: inline-block;
-
+  position: relative;
+  display: inline-block;
 }
 .input-file {
   display: none;
 }
 
 .input-file-btn {
-	position: relative;
-	display: flex;
+  position: relative;
+  display: flex;
   align-items: center;
   justify-content: center;
   width: 250px;
-	cursor: pointer;
-	outline: none;
-  font-family: Unageo,sans-serif;
-	text-decoration: none;
-	vertical-align: middle;
+  cursor: pointer;
+  outline: none;
+  font-family: Unageo, sans-serif;
+  text-decoration: none;
+  vertical-align: middle;
   align-items: center;
-  border: 1px solid #696969;
-	color: rgb(255, 255, 255);
-	text-align: center;
-	border-radius: 12px;
-	background-color: #2e2e2e;
-	line-height: 22px;
-	height: 50px;
-	padding: 0px 20px;
-	box-sizing: border-box;
+  border: 1px solid var(--border-color-input-file-btn);
+  color: var(--text-color);
+  text-align: center;
+  border-radius: 12px;
+  /* background-color: var(--background-not-addded-file-btn); */
+  line-height: 22px;
+  height: 50px;
+  padding: 0px 20px;
+  box-sizing: border-box;
   /* box-shadow: 0 0 70px #ffffff70; */
-	/* border: none; */
+  /* border: none; */
   /* outline: 1px solid #484848; */
-	margin: 0;
-	transition: background-color 0.2s;
-  transition: all 0.2s;
+  margin: 0;
+  /* transition: background-color 0.2s;
+  transition: all 0.2s; */
+}
+
+.btn-not-added-file {
+  background-color: var(--background-not-addded-file-btn);
+  border: 1px solid var(--border-not-addded-file-btn);
+}
+
+.btn-added-file {
+  background-color: var(--background-addded-file-btn);
+  border: 1px solid var(--border-addded-file-btn);
 }
 
 .control-panel {
@@ -197,25 +258,32 @@ button {
   justify-content: space-between;
   width: 100%;
   padding: 30px 30px;
-  border-bottom: 1px solid #212121;
-  border-top: 1px solid #212121;
+  border-bottom: 1px solid var(--color-lines);
+  border-top: 1px solid var(--color-lines);
 }
 
-.delete-btn {
+.recover-btn {
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: row;
   gap: 10px;
+  opacity: 80%;
+  transition: all 0.2s;
 }
 
-.delete-btn p {
+.recover-btn:hover {
+  opacity: 100%;
+  transition: all 0.2s;
+}
+
+.recover-btn p {
   font-size: 16px;
-  color: #dbdbdb;
+  color: var(--text-color);
 }
 
-.delete-icon {
+.recover-icon {
   width: 22px;
 }
 
@@ -227,30 +295,26 @@ button {
   justify-content: start;
 }
 
-body {
-  /* font-family: 'Unageo';
-  font-weight: 100; */
-  margin: 0;
-  display: flex;
-  /* place-items: center; */
-  min-width: 320px;
-  min-height: 100vh;
-  background-color: #111111;
-  color: #fff;
-}
-
 .switch-container {
   display: flex;
   flex-direction: row;
   gap: 10px;
   align-items: center;
   justify-content: start;
-  min-width: 240px;
+  width: 245px;
+}
+
+.switch-theme-container {
+  margin-top: 40px;
+  position: absolute !important;
+  right: 0px;
+  max-width: fit-content;
+  padding-right: 30px;
 }
 
 .switch-description {
   font-size: 16px;
-  color: #a0a0a0;
+  color: var(--text-color);
 }
 
 .download-container {
@@ -269,16 +333,16 @@ body {
 .author-info {
   position: absolute;
   bottom: 0px;
-  font-size: 14px;
-  color: #555555;
+  font-size: 12px;
+  color: var(--text-color-author);
   text-align: center;
-  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 .author-link {
-  color: #5f5f5f;
+  color: var(--text-color-author);
   text-decoration: underline;
-  font-weight: 400;
+  font-weight: 600;
   transition: all 0.2s ease;
 }
 
@@ -287,15 +351,14 @@ body {
   color: #686868;
 }
 
-
 input {
   min-height: 100px;
-  min-width: 100px;
+  min-width: 300px;
   padding: 0px 4px;
   background-color: #00000000;
+  cursor: pointer;
   /* border: 1px solid #ffffff; */
 }
-
 
 @media (prefers-color-scheme: light) {
   :root {

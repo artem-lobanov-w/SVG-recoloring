@@ -2,22 +2,27 @@ import "./App.css";
 import "./style.css";
 import React, { useState, useEffect, useRef } from "react";
 import ToggleSwitch from "./ToggleSwitch";
-import deleteSvg from "./img/Delete.svg";
 import recoverSvg from "./img/Recover.svg";
-import pickerSvg from "./img/Picker.svg";
+import recoverSvgWhite from "./img/RecoverWhite.svg";
+import copyCode from "./img/copyCode.svg";
+import copyCodeWhite from "./img/copyCodeWhite.svg";
 
 function App() {
   const [svgString, setSvgString] = useState(` `);
   const [svgStringFile, setSvgStringFile] = useState(null);
   const [fileAdd, setFileAdd] = useState(false);
-  const [newColor, setNewColor] = useState("#fffaaa");
+  const [newColor, setNewColor] = useState("#41e19c");
   const [isOn, setIsOn] = useState(false);
   const [originalSvgString, setOriginalSvgString] = useState('');
+  const [isDarkTheme , setIsDarkTheme] = useState(true);
 
   const svgRef = useRef();
 
-  const handleToggle = () => {
+  const handleToggleMode = () => {
     setIsOn(!isOn);
+  };
+  const handleToggleTheme = () => {
+    setIsDarkTheme(!isDarkTheme);
   };
   useEffect(() => {
     if (svgStringFile) {
@@ -28,6 +33,7 @@ function App() {
     const parser = new DOMParser();
     const doc = parser.parseFromString(svgStringFile, "image/svg+xml");
     const svgs = doc.querySelectorAll("svg");
+
     if (svgStringFile) {
       svgs.forEach((svg) => {
         svg.setAttribute("style", "max-width: 1160px; height: 520px; ");
@@ -174,13 +180,6 @@ function App() {
     const modifiedSVG = new XMLSerializer().serializeToString(doc);
     setSvgString(modifiedSVG);
   };
-
-  const handleDeleteFile = () => {
-    setFileAdd(false);
-    setSvgStringFile(null);
-    setSvgString(null);
-  };
-
   const handleFileChange = (event) => {
     setIsOn(false);
     const file = event.target.files[0];
@@ -191,9 +190,7 @@ function App() {
   
       reader.onload = (e) => {
         const svgContent = e.target.result;
-        setSvgStringFile(svgContent);
-        setSvgString(svgContent);
-
+        
         const parser = new DOMParser();
         const doc = parser.parseFromString(svgContent, "image/svg+xml");
         const svgOriginal = doc.querySelectorAll("svg")[0];
@@ -201,6 +198,8 @@ function App() {
         const modifiedSVG = new XMLSerializer().serializeToString(doc);
         // Исходное состояние файла
         setOriginalSvgString(modifiedSVG); 
+        setSvgStringFile(modifiedSVG);
+        setSvgString(modifiedSVG);
       };
   
       reader.readAsText(file);
@@ -232,9 +231,55 @@ function App() {
     setSvgString(originalSvgString); // Восстанавливаем исходное состояние
   };
 
+  useEffect(() => {
+    document.documentElement.style.setProperty('--background-color', isDarkTheme ? '#111111' : '#fafafa');
+    document.documentElement.style.setProperty('--text-color', isDarkTheme ? '#fff' : '#333');
+    document.documentElement.style.setProperty('--background-not-addded-file-btn', isDarkTheme ? '#2e2e2e' : '#f0f0f0');
+    document.documentElement.style.setProperty('--border-not-addded-file-btn', isDarkTheme ? '#fff' : '#333');
+    document.documentElement.style.setProperty('--background-addded-file-btn', isDarkTheme ? '#2e2e2e' : '#f0f0f0');
+    document.documentElement.style.setProperty('--border-addded-file-btn', isDarkTheme ? '#696969' : '#d1d1d1');
+    document.documentElement.style.setProperty('--background-change-color-btn', isDarkTheme ? '#2e2e2e' : '#f0f0f0');
+    document.documentElement.style.setProperty('--text-color-btn-dwnld', isDarkTheme ? '#111111' : '#fff');
+    document.documentElement.style.setProperty('--background-btn-dwnld', isDarkTheme ? '#fff' : '#2e2e2e');
+    document.documentElement.style.setProperty('--color-lines', isDarkTheme ? '#212121' : '#d1d1d1');
+    document.documentElement.style.setProperty('--border-color-input-file-btn', isDarkTheme ? '#696969' : '#c3c0c0');
+  }, [isDarkTheme]);
+
+  useEffect(() => {
+    if (svgStringFile) {
+      handleColorChange();
+    }
+  }, [newColor]);
+
+  const [classBtnAdd, setClassBtnAdd] = useState("btn-not-added-file");
+
+  useEffect(() => {
+    if (svgStringFile) {
+      setClassBtnAdd("btn-added-file");
+    } else {
+      setClassBtnAdd("btn-not-added-file");
+    }
+  }, [isDarkTheme, svgStringFile]);
+
   return (
     <div className="App">
-      <h1>SVG recolor</h1>
+      <div className="header">
+        <h1>SVG recolor</h1>
+        <div className="switch-container switch-theme-container">
+          <p className="switch-description"> 
+            <span style={isDarkTheme ? { fontWeight: "bold" } : { fontWeight: "bold" }}>
+              {isDarkTheme ? "Тёмная " : "Светлая "}
+            </span>
+            тема
+          </p>
+          <ToggleSwitch
+            isOn={isDarkTheme}
+            isThemeSwitch={true}
+            handleToggle={handleToggleTheme}
+            onColor={'#898989'}
+          />
+        </div>
+      </div>
       <div className="control-panel">
         <div className="change-color-container">
           <form>
@@ -244,42 +289,42 @@ function App() {
                 type="file"
                 onChange={handleFileChange}
               />
-              <span className="input-file-btn" style={svgStringFile ? { boxShadow: "0 0 70px #ffffff00", border: "1px solid #696969" } : { boxShadow: "0 0 70px #ffffff70", border: "1px solid #ffffff" }}>Выбрать SVG-файл</span>
+              <span className={`input-file-btn ${classBtnAdd}`} style={!svgStringFile ? { boxShadow: "0 0 70px #ffffff70" } : { boxShadow: "0 0 70px #ffffff00" }}>Выбрать SVG-файл</span>
             </label>
           </form>
-          <div className="delete-btn" onClick={ResetFile} style={svgStringFile ? { opacity: "100%", pointerEvents: "auto" } : { opacity: "30%", pointerEvents: "none" }}>
-            <img className="delete-icon" src={recoverSvg} alt="Восстановить" />
+          <div className="recover-btn" onClick={ResetFile} style={svgStringFile ? { pointerEvents: "auto" } : { opacity: "30%", pointerEvents: "none" }}>
+            <img className="recover-icon" src={isDarkTheme ? recoverSvg : recoverSvgWhite} alt="Восстановить" />
             <p>Восстановить исходный</p>
           </div>
         </div>
         <div className="change-color-container" style={svgStringFile ? { opacity: "100%", pointerEvents: "auto" } : { opacity: "30%", pointerEvents: "none" }}>
           <div className="change-color">
-            <div className="input-color" style={svgStringFile ? { boxShadow: `0 0 40px ${newColor}80` } : { boxShadow: `0 0 40px ${newColor}00` }}>
+            <div className="input-color" style={svgStringFile && isDarkTheme ? { boxShadow: `0 0 40px ${newColor}80` } : { boxShadow: `0 0 40px ${newColor}00` }}>
               <input
                 type="color"
                 value={newColor}
                 onChange={(e) => setNewColor(e.target.value)}
               />
-              <img className="recover-icon" src={pickerSvg} alt="Восстановить" />
+              <div className="indicator-color" style={{ backgroundColor: newColor }}></div>
+              <button
+                className="change-color-button"
+                onClick={fileAdd ? handleColorChange : null}
+                style={isDarkTheme ? { border: `1px solid ${newColor}` } : { border: `1px solid #696969` }}
+              >
+                Изменить цвет
+              </button>
             </div>
-            <button
-              className="change-color-button"
-              onClick={fileAdd ? handleColorChange : null}
-              style={{ border: `1px solid ${newColor}` }}
-            >
-              Применить
-            </button>
-            {/* <div className="input-color" onClick={ResetFile}></div> */}
           </div>
           <div className="switch-container">
             <ToggleSwitch
+              isThemeSwitch={false}
               isOn={isOn}
-              handleToggle={handleToggle}
+              handleToggle={handleToggleMode}
               onColor={newColor}
             />
             <p className="switch-description">
               Режим{" "}
-              <span style={isOn ? { color: newColor } : { color: "#ffffff" }}>
+              <span style={isOn ? { color: newColor, fontWeight: "bold" } : { fontWeight: "bold" }}>
                 {isOn ? "хроматический" : "ахроматический"}
               </span>
             </p>
@@ -287,7 +332,10 @@ function App() {
         </div>
         <div className="download-container" style={svgStringFile ? { opacity: "100%", pointerEvents: "auto" } : { opacity: "30%", pointerEvents: "none" }}>
           <button onClick={svgStringFile ? handleDownloadSVG : null}>Скачать SVG</button>
-          <p className="download-code-svg" onClick={svgStringFile ? handleCopy : null}>Скопировать код SVG</p>
+          <div className="recover-btn">
+            <img className="recover-icon" src={isDarkTheme ? copyCodeWhite : copyCode} alt="Восстановить" />
+            <p className="download-code-svg" onClick={svgStringFile ? handleCopy : null}>Скопировать код SVG</p>
+          </div>
         </div>
       </div>
       <div

@@ -1,8 +1,8 @@
 
-import React, { useState, useId } from 'react';
+import React, { useId } from 'react';
 import './ToggleSwitch.css'; // Стили вынесены в отдельный файл
 
-const ToggleSwitch = ({ isOn, handleToggle, onColor }) => {
+const ToggleSwitch = ({ isOn, handleToggle, onColor, isThemeSwitch }) => {
   const id = useId(); // Используем useId для генерации уникального id
 
   return (
@@ -16,10 +16,10 @@ const ToggleSwitch = ({ isOn, handleToggle, onColor }) => {
       />
       <label
         style={{ background: isOn && onColor }}
-        className="toggle-switch-label"
+        className={isThemeSwitch ? "toggle-switch-label switch-theme" : "toggle-switch-label"}
         htmlFor={id}
       >
-        <span className={`toggle-switch-button`} />
+        <div className={`toggle-switch-button`}>  </div>
       </label>
     </div>
   );
