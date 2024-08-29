@@ -6,15 +6,18 @@ import recoverSvg from "./img/Recover.svg";
 import recoverSvgWhite from "./img/RecoverWhite.svg";
 import copyCode from "./img/copyCode.svg";
 import copyCodeWhite from "./img/copyCodeWhite.svg";
+import QuestionMark from "./img/QuestionMark.svg";
+import QuestionMarkWhite from "./img/QuestionMarkWhite.svg";
+import InstructionPopup from "./InstructionPopup";
 
-function App() {
+const App = () => {
   const [svgString, setSvgString] = useState(` `);
   const [svgStringFile, setSvgStringFile] = useState(null);
   const [fileAdd, setFileAdd] = useState(false);
   const [newColor, setNewColor] = useState("#41e19c");
   const [isOn, setIsOn] = useState(false);
   const [originalSvgString, setOriginalSvgString] = useState('');
-  const [isDarkTheme , setIsDarkTheme] = useState(true);
+  const [isDarkMode , setIsDarkMode] = useState(true);
 
   const svgRef = useRef();
 
@@ -22,7 +25,7 @@ function App() {
     setIsOn(!isOn);
   };
   const handleToggleTheme = () => {
-    setIsDarkTheme(!isDarkTheme);
+    setIsDarkMode(!isDarkMode);
   };
   useEffect(() => {
     if (svgStringFile) {
@@ -52,9 +55,9 @@ function App() {
     }
   };
 
-  function changeHue(color1, color2) {
+  const changeHue = (color1, color2) => {
     // Функция для преобразования HEX в HSL
-    function hexToHSL(hex) {
+    const hexToHSL = (hex) => {
       let r = parseInt(hex.slice(1, 3), 16) / 255;
       let g = parseInt(hex.slice(3, 5), 16) / 255;
       let b = parseInt(hex.slice(5, 7), 16) / 255;
@@ -88,7 +91,7 @@ function App() {
     }
 
     // Функция для преобразования HSL в HEX
-    function hslToHex(h, s, l) {
+    const hslToHex = (h, s, l) => {
       l /= 100;
       const a = (s * Math.min(l, 1 - l)) / 100;
       const f = (n) => {
@@ -232,18 +235,18 @@ function App() {
   };
 
   useEffect(() => {
-    document.documentElement.style.setProperty('--background-color', isDarkTheme ? '#111111' : '#fafafa');
-    document.documentElement.style.setProperty('--text-color', isDarkTheme ? '#fff' : '#333');
-    document.documentElement.style.setProperty('--background-not-addded-file-btn', isDarkTheme ? '#2e2e2e' : '#f0f0f0');
-    document.documentElement.style.setProperty('--border-not-addded-file-btn', isDarkTheme ? '#fff' : '#333');
-    document.documentElement.style.setProperty('--background-addded-file-btn', isDarkTheme ? '#2e2e2e' : '#f0f0f0');
-    document.documentElement.style.setProperty('--border-addded-file-btn', isDarkTheme ? '#696969' : '#d1d1d1');
-    document.documentElement.style.setProperty('--background-change-color-btn', isDarkTheme ? '#2e2e2e' : '#f0f0f0');
-    document.documentElement.style.setProperty('--text-color-btn-dwnld', isDarkTheme ? '#111111' : '#fff');
-    document.documentElement.style.setProperty('--background-btn-dwnld', isDarkTheme ? '#fff' : '#2e2e2e');
-    document.documentElement.style.setProperty('--color-lines', isDarkTheme ? '#212121' : '#d1d1d1');
-    document.documentElement.style.setProperty('--border-color-input-file-btn', isDarkTheme ? '#696969' : '#c3c0c0');
-  }, [isDarkTheme]);
+    document.documentElement.style.setProperty('--background-color', isDarkMode ? '#111111' : '#fafafa');
+    document.documentElement.style.setProperty('--text-color', isDarkMode ? '#fff' : '#333');
+    document.documentElement.style.setProperty('--background-not-addded-file-btn', isDarkMode ? '#2e2e2e' : '#f0f0f0');
+    document.documentElement.style.setProperty('--border-not-addded-file-btn', isDarkMode ? '#fff' : '#333');
+    document.documentElement.style.setProperty('--background-addded-file-btn', isDarkMode ? '#2e2e2e' : '#f0f0f0');
+    document.documentElement.style.setProperty('--border-addded-file-btn', isDarkMode ? '#696969' : '#d1d1d1');
+    document.documentElement.style.setProperty('--background-change-color-btn', isDarkMode ? '#2e2e2e' : '#f0f0f0');
+    document.documentElement.style.setProperty('--text-color-btn-dwnld', isDarkMode ? '#111111' : '#fff');
+    document.documentElement.style.setProperty('--background-btn-dwnld', isDarkMode ? '#fff' : '#2e2e2e');
+    document.documentElement.style.setProperty('--color-lines', isDarkMode ? '#4b4b4b' : '#d1d1d1');
+    document.documentElement.style.setProperty('--border-color-input-file-btn', isDarkMode ? '#696969' : '#c3c0c0');
+  }, [isDarkMode]);
 
   useEffect(() => {
     if (svgStringFile) {
@@ -259,25 +262,30 @@ function App() {
     } else {
       setClassBtnAdd("btn-not-added-file");
     }
-  }, [isDarkTheme, svgStringFile]);
+  }, [isDarkMode, svgStringFile]);
 
   return (
     <div className="App">
       <div className="header">
         <h1>SVG recolor</h1>
         <div className="switch-container switch-theme-container">
-          <p className="switch-description"> 
-            <span style={isDarkTheme ? { fontWeight: "bold" } : { fontWeight: "bold" }}>
-              {isDarkTheme ? "Тёмная " : "Светлая "}
-            </span>
-            тема
-          </p>
           <ToggleSwitch
-            isOn={isDarkTheme}
+            isOn={isDarkMode}
             isThemeSwitch={true}
             handleToggle={handleToggleTheme}
             onColor={'#898989'}
           />
+          <p className="switch-description"> 
+            <span style={isDarkMode ? { fontWeight: "bold" } : { fontWeight: "bold" }}>
+              {isDarkMode ? "Тёмная " : "Светлая "}
+            </span>
+            тема
+          </p>
+        </div>
+        <div className="switch-container instructions-container">
+          <p>Инструкция</p>
+          <InstructionPopup isDarkModeNow={isDarkMode} />
+          {/* <img src={isDarkMode ? QuestionMarkWhite : QuestionMark} alt="copy-code"/> */}
         </div>
       </div>
       <div className="control-panel">
@@ -293,13 +301,13 @@ function App() {
             </label>
           </form>
           <div className="recover-btn" onClick={ResetFile} style={svgStringFile ? { pointerEvents: "auto" } : { opacity: "30%", pointerEvents: "none" }}>
-            <img className="recover-icon" src={isDarkTheme ? recoverSvg : recoverSvgWhite} alt="Восстановить" />
+            <img className="recover-icon" src={isDarkMode ? recoverSvg : recoverSvgWhite} alt="Восстановить" />
             <p>Восстановить исходный</p>
           </div>
         </div>
         <div className="change-color-container" style={svgStringFile ? { opacity: "100%", pointerEvents: "auto" } : { opacity: "30%", pointerEvents: "none" }}>
           <div className="change-color">
-            <div className="input-color" style={svgStringFile && isDarkTheme ? { boxShadow: `0 0 40px ${newColor}80` } : { boxShadow: `0 0 40px ${newColor}00` }}>
+            <div className="input-color" style={svgStringFile && isDarkMode ? { boxShadow: `0 0 40px ${newColor}80` } : { boxShadow: `0 0 40px ${newColor}00` }}>
               <input
                 type="color"
                 value={newColor}
@@ -309,7 +317,7 @@ function App() {
               <button
                 className="change-color-button"
                 onClick={fileAdd ? handleColorChange : null}
-                style={isDarkTheme ? { border: `1px solid ${newColor}` } : { border: `1px solid #696969` }}
+                style={isDarkMode ? { border: `1px solid ${newColor}` } : { border: `1px solid #696969` }}
               >
                 Изменить цвет
               </button>
@@ -333,7 +341,7 @@ function App() {
         <div className="download-container" style={svgStringFile ? { opacity: "100%", pointerEvents: "auto" } : { opacity: "30%", pointerEvents: "none" }}>
           <button onClick={svgStringFile ? handleDownloadSVG : null}>Скачать SVG</button>
           <div className="recover-btn">
-            <img className="recover-icon" src={isDarkTheme ? copyCodeWhite : copyCode} alt="Восстановить" />
+            <img className="recover-icon" src={isDarkMode ? copyCodeWhite : copyCode} alt="Восстановить" />
             <p className="download-code-svg" onClick={svgStringFile ? handleCopy : null}>Скопировать код SVG</p>
           </div>
         </div>
