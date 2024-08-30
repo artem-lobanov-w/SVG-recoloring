@@ -6,8 +6,6 @@ import recoverSvg from "./img/Recover.svg";
 import recoverSvgWhite from "./img/RecoverWhite.svg";
 import copyCode from "./img/copyCode.svg";
 import copyCodeWhite from "./img/copyCodeWhite.svg";
-import QuestionMark from "./img/QuestionMark.svg";
-import QuestionMarkWhite from "./img/QuestionMarkWhite.svg";
 import InstructionPopup from "./InstructionPopup";
 
 const App = () => {
@@ -18,6 +16,7 @@ const App = () => {
   const [isOn, setIsOn] = useState(false);
   const [originalSvgString, setOriginalSvgString] = useState('');
   const [isDarkMode , setIsDarkMode] = useState(true);
+  const [newFileName, setNewFileName] = useState(null);
 
   const svgRef = useRef();
 
@@ -186,8 +185,10 @@ const App = () => {
   const handleFileChange = (event) => {
     setIsOn(false);
     const file = event.target.files[0];
-  
+    
     if (file && file.type === "image/svg+xml") {
+      const fileName = file.name.slice(0, -4);
+      setNewFileName(fileName);
       setFileAdd(true);
       const reader = new FileReader();
   
@@ -199,8 +200,10 @@ const App = () => {
         const svgOriginal = doc.querySelectorAll("svg")[0];
         svgOriginal.setAttribute("style", "max-width: 1160px; height: 520px; ");
         const modifiedSVG = new XMLSerializer().serializeToString(doc);
+        
         // Исходное состояние файла
         setOriginalSvgString(modifiedSVG); 
+
         setSvgStringFile(modifiedSVG);
         setSvgString(modifiedSVG);
       };
@@ -221,7 +224,7 @@ const App = () => {
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = "recolored-svg-image.svg";
+    link.download = newFileName + "-recolored.svg";
 
     document.body.appendChild(link);
     link.click();
@@ -231,12 +234,12 @@ const App = () => {
   };
 
   const ResetFile = () => {
-    setSvgString(originalSvgString); // Восстанавливаем исходное состояние
+    setSvgString(originalSvgString); 
   };
 
   useEffect(() => {
     document.documentElement.style.setProperty('--background-color', isDarkMode ? '#111111' : '#fafafa');
-    document.documentElement.style.setProperty('--text-color', isDarkMode ? '#fff' : '#333');
+    document.documentElement.style.setProperty('--text-color', isDarkMode ? '#e9e9e9' : '#333');
     document.documentElement.style.setProperty('--background-not-addded-file-btn', isDarkMode ? '#2e2e2e' : '#f0f0f0');
     document.documentElement.style.setProperty('--border-not-addded-file-btn', isDarkMode ? '#fff' : '#333');
     document.documentElement.style.setProperty('--background-addded-file-btn', isDarkMode ? '#2e2e2e' : '#f0f0f0');
@@ -244,8 +247,10 @@ const App = () => {
     document.documentElement.style.setProperty('--background-change-color-btn', isDarkMode ? '#2e2e2e' : '#f0f0f0');
     document.documentElement.style.setProperty('--text-color-btn-dwnld', isDarkMode ? '#111111' : '#fff');
     document.documentElement.style.setProperty('--background-btn-dwnld', isDarkMode ? '#fff' : '#2e2e2e');
-    document.documentElement.style.setProperty('--color-lines', isDarkMode ? '#4b4b4b' : '#d1d1d1');
+    document.documentElement.style.setProperty('--color-lines', isDarkMode ? '#2c2c2c' : '#d1d1d1');
+    document.documentElement.style.setProperty('--color-lines-instructions', isDarkMode ? '#4b4b4b' : '#d1d1d1');
     document.documentElement.style.setProperty('--border-color-input-file-btn', isDarkMode ? '#696969' : '#c3c0c0');
+    document.documentElement.style.setProperty('--text-color-author', isDarkMode ? '#555555' : '#c3c0c0');
   }, [isDarkMode]);
 
   useEffect(() => {
@@ -285,7 +290,6 @@ const App = () => {
         <div className="switch-container instructions-container">
           <p>Инструкция</p>
           <InstructionPopup isDarkModeNow={isDarkMode} />
-          {/* <img src={isDarkMode ? QuestionMarkWhite : QuestionMark} alt="copy-code"/> */}
         </div>
       </div>
       <div className="control-panel">
@@ -353,7 +357,7 @@ const App = () => {
       />
       <p className="author-info">
         Created by{" "}
-        <a className="author-link" href="https://github.com/artem-lobanov-w">
+        <a className="author-link" target="_blank" href="https://github.com/artem-lobanov-w">
           Artem Lobanov
         </a>
       </p>

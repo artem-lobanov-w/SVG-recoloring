@@ -47,7 +47,7 @@ const InstructionPopup = ({ isDarkModeNow }) => {
             right: "-262px",
             transform: "translateX(-50%)",
             backgroundColor: "var(--background-not-addded-file-btn)",
-            border: "1px solid var(--color-lines)",
+            border: "1px solid var(--color-lines-instructions)",
             padding: "30px",
             zIndex: 1000,
             lineHeight: "normal",
@@ -57,19 +57,17 @@ const InstructionPopup = ({ isDarkModeNow }) => {
         >
           <div
             style={{
-              borderBottom: "1px solid var(--color-lines)",
+              borderBottom: "1px solid var(--color-lines-instructions)",
               paddingBottom: "20px",
             }}
           >
             <b>ВАЖНО:</b> Перед загрузкой файла необходимо{" "}
-            <b>экспортировать файл из Фигмы</b>!
+            <b>экспортировать файл из Фигмы</b>! Также при экспорте проверьте, чтобы был <b>отключён</b> чек-бокс «Simplify stroke». 
             <br />
-            <br />
-            Это необходимо, чтобы привести все цвета в SVG файле к одному виду — шеснадцатиричной форме записи, например, #000000.
           </div>
           <div
             style={{
-              borderBottom: "1px solid var(--color-lines)",
+              borderBottom: "1px solid var(--color-lines-instructions)",
               paddingBottom: "20px",
               color: "var(--text-color)",
             }}
@@ -78,7 +76,7 @@ const InstructionPopup = ({ isDarkModeNow }) => {
           </div>
           <div
             style={{
-              borderBottom: "1px solid var(--color-lines)",
+              borderBottom: "1px solid var(--color-lines-instructions)",
               paddingBottom: "20px",
               color: "var(--text-color)",
             }}
@@ -95,7 +93,7 @@ const InstructionPopup = ({ isDarkModeNow }) => {
             <br />
             <b>Копирование кода</b>
             <br />
-            При нажатии кнопки "Копировать код SVG", файл можно вставить прямо в Фигму, воспользовавашись <a сlassName="plagin-link" target="_blank" href="https://www.figma.com/community/plugin/1053060499715879789/svg-text-import-export" style={{ color: "var(--text-color)" }}>плагином импорта/экспорта SVG</a>.  
+            При нажатии кнопки «Копировать код SVG», файл можно вставить прямо в Фигму, воспользовавашись <a className="plagin-link" target="_blank" href="https://www.figma.com/community/plugin/1053060499715879789/svg-text-import-export" style={{ color: "var(--text-color)" }}>плагином импорта/экспорта SVG</a>.  
           </div>
         </div>
       )}
