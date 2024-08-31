@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/SVG-recoloring/static/css/main.05de214d.css",
-    "main.js": "/SVG-recoloring/static/js/main.c1fb80ba.js",
+    "main.css": "/SVG-recoloring/static/css/main.feb7998b.css",
+    "main.js": "/SVG-recoloring/static/js/main.6d84d59d.js",
     "static/js/453.7ae672de.chunk.js": "/SVG-recoloring/static/js/453.7ae672de.chunk.js",
     "static/media/Unageo-Italic.ttf": "/SVG-recoloring/static/media/Unageo-Italic.a8002ffb08bd22a1e1d1.ttf",
     "static/media/Unageo.ttf": "/SVG-recoloring/static/media/Unageo.3c21130b22859102c924.ttf",
@@ -17,12 +17,12 @@
     "static/media/copyCodeWhite.svg": "/SVG-recoloring/static/media/copyCodeWhite.19944f0d4c96b648976d961092460c4a.svg",
     "static/media/CloseIcon.svg": "/SVG-recoloring/static/media/CloseIcon.492373b0030f5a696b06f9c0c8fe6292.svg",
     "static/media/CloseIconWhite.svg": "/SVG-recoloring/static/media/CloseIconWhite.f4ce846d4b68e60e7c5cf1cdf5b284ae.svg",
-    "main.05de214d.css.map": "/SVG-recoloring/static/css/main.05de214d.css.map",
-    "main.c1fb80ba.js.map": "/SVG-recoloring/static/js/main.c1fb80ba.js.map",
+    "main.feb7998b.css.map": "/SVG-recoloring/static/css/main.feb7998b.css.map",
+    "main.6d84d59d.js.map": "/SVG-recoloring/static/js/main.6d84d59d.js.map",
     "453.7ae672de.chunk.js.map": "/SVG-recoloring/static/js/453.7ae672de.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.05de214d.css",
-    "static/js/main.c1fb80ba.js"
+    "static/css/main.feb7998b.css",
+    "static/js/main.6d84d59d.js"
   ]
 }
