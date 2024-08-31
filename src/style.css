@@ -200,7 +200,6 @@ button {
   border: 1px solid #484848;
   border-radius: 8px;
   color: var(--text-color);
-  /* min-width: 100px; */
 }
 
 .change-color {
@@ -237,17 +236,11 @@ button {
   color: var(--text-color);
   text-align: center;
   border-radius: 12px;
-  /* background-color: var(--background-not-addded-file-btn); */
   line-height: 22px;
   height: 50px;
   padding: 0px 20px;
   box-sizing: border-box;
-  /* box-shadow: 0 0 70px #ffffff70; */
-  /* border: none; */
-  /* outline: 1px solid #484848; */
   margin: 0;
-  /* transition: background-color 0.2s;
-  transition: all 0.2s; */
 }
 
 .btn-not-added-file {
@@ -273,7 +266,7 @@ button {
   border-top: 1px solid var(--color-lines);
 }
 
-.recover-btn {
+.btn-with-icon {
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -284,12 +277,12 @@ button {
   transition: all 0.2s;
 }
 
-.recover-btn:hover {
+.btn-with-icon:hover {
   opacity: 100%;
   transition: all 0.2s;
 }
 
-.recover-btn p {
+.btn-with-icon p {
   font-size: 16px;
   color: var(--text-color);
 }
